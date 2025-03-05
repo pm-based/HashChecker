@@ -1,9 +1,10 @@
 import os
+import unicodedata
 
 def load_hashes(hashes_file_path):
     hashes = {}
     try:
-        with open(hashes_file_path, 'r') as f:
+        with open(hashes_file_path, 'r', encoding="utf-8", errors="replace") as f:
             for line in f:
                 parts = line.strip().rsplit(' ', 1)
                 file_path, file_hash = parts
@@ -22,7 +23,11 @@ def compare_hashes(original_hashes, hashes):
     for hash in list(original_hashes.keys()):
         try:
             file = hashes[hash]
-            if original_hashes[hash]['file_name'] == file['file_name']:
+            # Normalize names in order to avoid encoding mismatch
+            original_file_name = unicodedata.normalize('NFC', original_hashes[hash]['file_name'])
+            file_name = unicodedata.normalize('NFC', file['file_name'])
+
+            if original_file_name == file_name:
                 original_hashes.pop(hash)
                 hashes.pop(hash)
         except KeyError:
