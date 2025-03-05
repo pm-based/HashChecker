@@ -7,7 +7,8 @@ def main():
     # Output directory: Original hashes files that are not matched
     dir_original_hashes_not_matched = "original_hashes_not_mached"
     # List of original hashes files name
-    file_list = [f for f in os.listdir(dir_original_hashes_files) if os.path.isfile(os.path.join(dir_original_hashes_files, f))]
+    file_list = [f for f in os.listdir(dir_original_hashes_files)
+                 if os.path.isfile(os.path.join(dir_original_hashes_files, f)) and not f.startswith('.')]
 
     hashes_file = ht.load_hashes("server_hashes.txt")
 
